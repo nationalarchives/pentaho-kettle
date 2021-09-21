@@ -224,9 +224,10 @@ public class LogBrowser {
     } );
 
     final Menu menu = new Menu( text );
-    MenuItem item = new MenuItem( menu, SWT.NONE );
-    item.setText( BaseMessages.getString( PKG, "LogBrowser.CopySelectionToClipboard.MenuItem" ) );
-    item.addSelectionListener( new SelectionAdapter() {
+
+    MenuItem copyToClipboardItem = new MenuItem( menu, SWT.NONE );
+    copyToClipboardItem.setText( BaseMessages.getString( PKG, "LogBrowser.CopySelectionToClipboard.MenuItem" ) );
+    copyToClipboardItem.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( SelectionEvent event ) {
         String selection = text.getSelectionText();
@@ -235,8 +236,18 @@ public class LogBrowser {
         }
       }
     } );
-    text.setMenu( menu );
 
+    MenuItem selectAllItem = new MenuItem( menu, SWT.NONE );
+    selectAllItem.setText( BaseMessages.getString( PKG, "LogBrowser.SelectAll.MenuItem" ) );
+    selectAllItem.setAccelerator( SWT.MOD1 | 'a' );
+    selectAllItem.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( SelectionEvent event ) {
+        text.selectAll();
+      }
+    } );
+
+    text.setMenu( menu );
     text.addMouseListener( new MouseAdapter() {
       @Override
       public void mouseDown( MouseEvent event ) {
