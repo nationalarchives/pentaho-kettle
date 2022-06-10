@@ -57,7 +57,7 @@ public class RowMeta implements RowMetaInterface {
   public static final String XML_META_TAG = "row-meta";
   public static final String XML_DATA_TAG = "row-data";
 
-  private final ReentrantReadWriteLock lock;
+  protected final ReentrantReadWriteLock lock;
   private final RowMetaCache cache;
   List<ValueMetaInterface> valueMetaList;
   List<Integer> needRealClone;
@@ -622,7 +622,7 @@ public class RowMeta implements RowMetaInterface {
     }
   }
 
-  private ValueMetaInterface renameValueMetaIfInRow( ValueMetaInterface valueMeta, String originStep ) {
+  protected ValueMetaInterface renameValueMetaIfInRow( ValueMetaInterface valueMeta, String originStep ) {
     // We want to rename the field to Name[2], Name[3], ...
     //
     int index = 1;

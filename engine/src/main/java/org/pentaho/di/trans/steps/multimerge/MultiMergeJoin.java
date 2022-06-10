@@ -134,7 +134,7 @@ public class MultiMergeJoin extends BaseStep implements StepInterface {
     data.dummy = new Object[streamSize][];
 
     RowMetaInterface rowMeta;
-    data.outputRowMeta = new RowMeta();
+    data.outputRowMeta = new MultiMergeRowMeta();
     for ( int i = 0, j = 0; i < inputStepNames.length; i++ ) {
       inputStepName = inputStepNames[i];
       if ( !inputStepNameList.contains( inputStepName ) ) {
