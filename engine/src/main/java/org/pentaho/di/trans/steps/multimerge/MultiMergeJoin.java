@@ -30,7 +30,6 @@ import org.pentaho.di.core.RowSet;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleStepException;
 import org.pentaho.di.core.row.RowDataUtil;
-import org.pentaho.di.core.row.RowMeta;
 import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.i18n.BaseMessages;
@@ -134,7 +133,7 @@ public class MultiMergeJoin extends BaseStep implements StepInterface {
     data.dummy = new Object[streamSize][];
 
     RowMetaInterface rowMeta;
-    data.outputRowMeta = new RowMeta();
+    data.outputRowMeta = new MultiMergeRowMeta(meta.isPreventDuplicateFields());
     for ( int i = 0, j = 0; i < inputStepNames.length; i++ ) {
       inputStepName = inputStepNames[i];
       if ( !inputStepNameList.contains( inputStepName ) ) {
@@ -263,7 +262,11 @@ public class MultiMergeJoin extends BaseStep implements StepInterface {
         for ( int i = 0; i < streamSize; i++ ) {
           data.rows[i] = data.results.get( i ).get( data.drainIndices[i] );
         }
-        row = RowDataUtil.createResizedCopy( data.rows, data.rowLengths );
+        if(meta.isPreventDuplicateFields()){
+          row = RowDataUtil.createCustomResizedCopy( data.rows, data.metas, RowDataUtil.InputRowSelectionPolicy.USE_FIRST, data.outputRowMeta.getValueMetaList()); // TODO(AR) make the InputRowSelectionPolicy configurable
+        } else {
+          row = RowDataUtil.createResizedCopy( data.rows, data.rowLengths );
+        }
 
         putRow( data.outputRowMeta, row );
 

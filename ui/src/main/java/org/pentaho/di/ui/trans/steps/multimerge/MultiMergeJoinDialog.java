@@ -69,6 +69,7 @@ import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.widget.ColumnInfo;
 import org.pentaho.di.ui.core.widget.TableView;
 import org.pentaho.di.ui.trans.step.BaseStepDialog;
+import org.pentaho.di.ui.trans.step.ComponentSelectionListener;
 
 public class MultiMergeJoinDialog extends BaseStepDialog implements StepDialogInterface {
   private static Class<?> PKG = MultiMergeJoinMeta.class; // for i18n purposes, needed by Translator2!!
@@ -77,6 +78,12 @@ public class MultiMergeJoinDialog extends BaseStepDialog implements StepDialogIn
 
   private CCombo[] wInputStepArray;
   private CCombo joinTypeCombo;
+
+  private Label wlPreventDuplicates;
+
+  private Button wPreventDuplicates;
+  private FormData fdlPreventDuplicates, fdPreventDuplicates;
+
   private Text[] keyValTextBox;
 
   private Map<String, Integer> inputFields;
@@ -171,6 +178,8 @@ public class MultiMergeJoinDialog extends BaseStepDialog implements StepDialogIn
     // create widgets for Join type
     createJoinTypeWidget( lsMod );
 
+    createPreventDuplicatesWidget();
+
     // Some buttons
     wOK = new Button( shell, SWT.PUSH );
     wOK.setText( BaseMessages.getString( PKG, "System.Button.OK" ) );
@@ -256,6 +265,30 @@ public class MultiMergeJoinDialog extends BaseStepDialog implements StepDialogIn
     fdType.left = new FormAttachment( 15, 0 );
     fdType.right = new FormAttachment( 35, 0 );
     joinTypeCombo.setLayoutData( fdType );
+  }
+
+  private void createPreventDuplicatesWidget() {
+
+    wlPreventDuplicates = new Label( shell, SWT.LEFT );
+    wlPreventDuplicates.setText( BaseMessages.getString( PKG, "MultiMergeJoinDialog.PreventDuplicates.Label" ) );
+    props.setLook(wlPreventDuplicates);
+
+    fdlPreventDuplicates = new FormData();
+    fdlPreventDuplicates.left = new FormAttachment( 0, 0);
+    fdlPreventDuplicates.top = new FormAttachment( joinTypeCombo, 20);
+    wlPreventDuplicates.setLayoutData( fdlPreventDuplicates );
+
+    wPreventDuplicates = new Button( shell, SWT.CHECK );
+    wPreventDuplicates.setToolTipText( BaseMessages.getString( PKG, "MultiMergeJoinDialog.PreventDuplicates.Tooltip" ) );
+    props.setLook(wPreventDuplicates);
+
+    fdPreventDuplicates = new FormData();
+    fdPreventDuplicates.top = new FormAttachment( joinTypeCombo, 20 );
+    fdPreventDuplicates.left = new FormAttachment(wlPreventDuplicates, margin );
+
+    wPreventDuplicates.setLayoutData( fdPreventDuplicates );
+    wPreventDuplicates.addSelectionListener( new ComponentSelectionListener( joinMeta ) );
+
   }
 
   /**
@@ -516,6 +549,7 @@ public class MultiMergeJoinDialog extends BaseStepDialog implements StepDialogIn
         joinTypeCombo.setText( MultiMergeJoinMeta.join_types[0] );
       }
     }
+    wPreventDuplicates.setSelection(joinMeta.isPreventDuplicateFields());
     wStepname.selectAll();
     wStepname.setFocus();
   }
@@ -574,6 +608,7 @@ public class MultiMergeJoinDialog extends BaseStepDialog implements StepDialogIn
     }
 
     meta.setJoinType( joinTypeCombo.getText() );
+    meta.setPreventDuplicateFields(wPreventDuplicates.getSelection());
   }
 
   private void ok() {
