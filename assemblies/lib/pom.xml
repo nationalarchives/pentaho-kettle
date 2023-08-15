@@ -56,7 +56,7 @@
     <bahir.version>2.3.2</bahir.version>
     <snowflake-jdbc.version>3.6.28</snowflake-jdbc.version>
     <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-    <jface.version>3.22.0</jface.version>
+    <jface.version>3.3.0-I20070606-0010</jface.version>
   </properties>
 
   <dependencies>
@@ -129,8 +129,8 @@
 
 	<!-- Updated Eclipse Dependencies -->
     <dependency>
-        <groupId>org.eclipse.platform</groupId>
-        <artifactId>org.eclipse.jface</artifactId>
+        <groupId>org.eclipse</groupId>
+        <artifactId>jface</artifactId>
         <version>${jface.version}</version>
     </dependency>
 	
